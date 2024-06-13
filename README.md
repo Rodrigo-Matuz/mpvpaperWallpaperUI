@@ -1,65 +1,44 @@
 # Mpvpaper Wallpaper UI Selection
 
-very basic UI to select a wallpaper, uses electron
-(very messy readme file, feel free to update)
+This project provides a basic UI for selecting wallpapers using Electron. The current state of the readme is messy; please feel free to update as needed.
 
 ## Dependencies
 
 -   [mpvpaper](https://github.com/GhostNaN/mpvpaper)
 
-## Installation Guide
+<details open>
+<summary>Installation Guide</summary>
+<br>
 
-Follow these steps to set up and run the **mpvpaper_wallpaper_picker_ui** Electron application:
+Check out [releases](https://github.com/Rodrigo-Matuz/mpvpaperWallpaperUI/releases) for pre-built packages
 
-1. **Clone the repository**:
+1. **Clone the repository:**
 
-```bash
-git clone https://github.com/Rodrigo-Matuz/mpvpaperWallpaperUI.git
-```
-
-2. **Install Dependencies**:
-
-```
-npm install
-```
-
-3. Build the application (or run it using `npm start`):
-
-```
-npm run make
-
-```
-
--   After running `npm run make`, you'll find the built packages in the `out/make` directory.
-
-5. **Installing the Debian package (deb)**:
-
--   Navigate to the directory where the deb package is located (`out/make/deb/x64`):
-    ```
-    cd out/make/deb/x64
-    ```
--   Extract the package contents into a temporary directory:
-    ```
-    mkdir temp_dir
-    dpkg -x mpvpaper-wallpaper-picker-ui_1.0.0_amd64.deb temp_dir
-    ```
--   Copy the extracted contents to the root directory (requires sudo):
-    ```
-    sudo cp -R temp_dir/* /
+    ```bash
+    git clone https://github.com/Rodrigo-Matuz/mpvpaperWallpaperUI.git
+    cd mpvpaperWallpaperUI
     ```
 
-6. **Installing the RPM package (rpm)**:
+2. **Install Dependencies:**
 
--   Navigate to the directory where the rpm package is located (`out/make/rpm/x64`):
+    ```bash
+    npm install
     ```
-    cd out/make/rpm/x64
+
+3. **Build the application** (or run it using `npm start`):
+
+    ```bash
+    npm run make
     ```
--   Extract the package contents into a temporary directory (requires fakeroot and rpmbuild):
+
+4. **Install Packages:**
+
+    ```bash
+    cd out/make
     ```
-    mkdir temp_dir
-    fakeroot rpmbuild --root temp_dir --unpack mpvpaper-wallpaper-picker-ui-1.0.0-1.x86_64.rpm
-    ```
--   Copy the extracted contents to the root directory (requires sudo):
-    ```
-    sudo cp -R temp_dir/* /
-    ```
+
+    Install either the deb package or the rpm, depending on your Linux distribution.
+
+</details>
+
+Quick project to satisfy my needs.

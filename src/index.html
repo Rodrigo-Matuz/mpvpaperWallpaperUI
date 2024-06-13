@@ -11,8 +11,39 @@
             <button class="button-open-folder">
                 <img src="./icons/folder-image.svg" alt="Folder Icon" />
             </button>
+
+            <input
+                type="text"
+                id="searchBar"
+                class="header-center"
+                placeholder="Search Wallpapers..."
+                autofocus
+            />
+
+            <button class="button-settings">
+                <img src="./icons/settings.svg" alt="Settings Icon" />
+            </button>
         </header>
+
         <div class="loading-items" style="display: none">Loading...</div>
         <div class="display-items"></div>
+
+        <div class="settings-panel" style="display: none">
+            <div class="settings-option">
+                <span class="settings-title">Close Settings</span>
+                <button class="close-settings">Close</button>
+            </div>
+
+            <div class="settings-option">
+                <span class="settings-title">Clear app cache</span>
+                <button class="clear-cache">Cache</button>
+            </div>
+
+            <!-- <div class="settings-option"> -->
+            <!--     <span class="settings-title">Command to execute</span> -->
+            <!--     <input type="text" id="commandInput" /> -->
+            <!--     <button class="save-command">Save</button> -->
+            <!-- </div> -->
+        </div>
     </body>
 </html>

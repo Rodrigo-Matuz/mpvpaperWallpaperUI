@@ -1,18 +1,14 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const path = require("node:path");
+const path = require("path");
 const fs = require("fs");
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
-const { playVideo } = require("./videoPlayer"); // Import the playVideo function
+const { playVideo } = require("./videoPlayer");
 
 ffmpeg.setFfmpegPath(ffmpegPath);
-let store;
-
-if (require("electron-squirrel-startup")) {
-    app.quit();
-}
 
 let mainWindow;
+let store;
 
 const createWindow = async () => {
     const Store = await import("electron-store");
@@ -43,20 +39,29 @@ const createWindow = async () => {
     });
 };
 
-app.whenReady().then(() => {
-    createWindow();
-
-    app.on("activate", () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
-        }
-    });
-});
+app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+});
+
+app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
+
+ipcMain.handle("get-command", () => {
+    return store.get(
+        "command",
+        "killall mpvpaper ; mpvpaper -o 'loop no-audio' '*' {videoPath}",
+    );
+});
+
+ipcMain.handle("set-command", (event, command) => {
+    store.set("command", command);
 });
 
 ipcMain.handle("select-folder", async () => {
@@ -71,6 +76,14 @@ ipcMain.handle("select-folder", async () => {
     store.set("previousData", { path: selectedPath, videoData });
 
     return videoData;
+});
+
+ipcMain.handle("play-video", (event, videoPath) => {
+    playVideo(videoPath);
+});
+
+ipcMain.handle("clear-cache", () => {
+    store.clear();
 });
 
 async function getVideoData(directoryPath) {
@@ -91,7 +104,7 @@ async function getVideoData(directoryPath) {
 
 async function generateThumbnail(videoPath) {
     const thumbnailPath = path.join(
-        app.getPath("userData"), // Changed to userData to persist thumbnails
+        app.getPath("userData"),
         "thumbnails",
         `${path.basename(videoPath, ".mp4")}.png`,
     );
@@ -110,13 +123,9 @@ async function generateThumbnail(videoPath) {
                 count: 1,
                 folder: path.join(app.getPath("userData"), "thumbnails"),
                 filename: `${path.basename(videoPath, ".mp4")}.png`,
-                size: "200x113",
+                size: "250x141",
             })
             .on("end", () => resolve(thumbnailPath))
             .on("error", (err) => reject(err));
     });
 }
-
-ipcMain.handle("play-video", (event, videoPath) => {
-    playVideo(videoPath);
-});

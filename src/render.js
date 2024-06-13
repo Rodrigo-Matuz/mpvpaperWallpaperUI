@@ -1,29 +1,85 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const buttonOpenFolder = document.querySelector(
         "button.button-open-folder",
     );
     const displayItems = document.querySelector(".display-items");
     const loadingItems = document.querySelector(".loading-items");
+    const searchBar = document.getElementById("searchBar");
+    const buttonSettings = document.querySelector("button.button-settings");
+    const settingsPanel = document.querySelector(".settings-panel");
+    const closeSettingsButton = document.querySelector(".close-settings");
+    const clearCacheButton = document.querySelector(".clear-cache");
+    const commandInput = document.getElementById("commandInput");
+    const saveCommandButton = document.querySelector(".save-command");
+
+    let videoDataCache = [];
+
+    // Function to load command from storage
+    const loadCommand = async () => {
+        try {
+            const command = await window.electronAPI.getCommand();
+            commandInput.value = command;
+        } catch (err) {
+            console.error("Failed to load command:", err);
+        }
+    };
+
+    // Initial load of command when DOM is ready
+    loadCommand();
 
     buttonOpenFolder.addEventListener("click", async () => {
         loadingItems.style.display = "block";
         displayItems.innerHTML = "";
 
-        const videoData = await window.electron.selectFolder();
+        const videoData = await window.electronAPI.selectFolder();
+        videoDataCache = videoData;
 
         loadingItems.style.display = "none";
-
         displayThumbnails(videoData);
     });
 
-    // Listen for the load-previous-path event
-    window.electron.receive("load-previous-path", (previousData) => {
+    window.electronAPI.receive("load-previous-path", (previousData) => {
         loadingItems.style.display = "none";
+        videoDataCache = previousData.videoData;
         displayThumbnails(previousData.videoData);
     });
 
+    searchBar.addEventListener("input", (event) => {
+        const searchTerm = event.target.value.toLowerCase().replace(/_/g, " ");
+        const filteredData = videoDataCache.filter(({ thumbnailPath }) => {
+            const normalizedThumbnailPath = thumbnailPath
+                .toLowerCase()
+                .replace(/_/g, " ");
+            return normalizedThumbnailPath.includes(searchTerm);
+        });
+        displayThumbnails(filteredData);
+    });
+
+    buttonSettings.addEventListener("click", () => {
+        settingsPanel.style.display = "flex";
+    });
+
+    closeSettingsButton.addEventListener("click", () => {
+        settingsPanel.style.display = "none";
+    });
+
+    clearCacheButton.addEventListener("click", async () => {
+        const response = confirm("Are you sure you want to clear the cache?");
+        if (response) {
+            await window.electronAPI.clearCache();
+            alert("Cache cleared successfully!");
+        }
+    });
+
+    // Save the command when the save button is clicked
+    saveCommandButton.addEventListener("click", async () => {
+        const newCommand = commandInput.value;
+        await window.electronAPI.setCommand(newCommand);
+        alert("Command saved successfully!");
+    });
+
     function displayThumbnails(videoData) {
-        displayItems.innerHTML = ""; // Clear previous items
+        displayItems.innerHTML = "";
         videoData.forEach(({ videoPath, thumbnailPath }) => {
             const container = document.createElement("div");
             container.className = "video-container";
@@ -67,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             img.addEventListener("click", () => {
                 console.log(videoPath);
-                window.electron.playVideo(videoPath);
+                window.electronAPI.playVideo(videoPath);
             });
         });
     }

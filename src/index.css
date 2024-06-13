@@ -1,0 +1,109 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    --base-bg-color: #1c1c1c;
+    --sec-bg-color: #202020;
+    --accent-color: rgba(30, 101, 255, 1);
+    --sec-accent-color: rgba(96, 84, 208, 1);
+    --text-color: #fcfcfc;
+    background-color: var(--base-bg-color);
+}
+
+header {
+    width: 100%;
+    height: 50px;
+    background-color: var(--sec-bg-color);
+    display: flex;
+    align-items: center;
+}
+
+button {
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.button-open-folder {
+    margin-left: 5px;
+    width: 6%;
+    height: 80%;
+    min-width: 60px;
+    background-color: var(--accent-color);
+    /* color: var(--text-color); */
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.button-open-folder img {
+    width: 35px; /* Adjust size as needed */
+    height: 35px; /* Adjust size as needed */
+}
+
+.button-open-folder:hover {
+    background-color: var(--sec-accent-color);
+}
+
+.button-open-folder svg {
+    width: 24px; /* Adjust size as needed */
+    height: 24px; /* Adjust size as needed */
+}
+
+.loading-items {
+    font-size: 25px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--accent-color);
+}
+
+.display-items {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.video-container {
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.video-container img {
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+}
+
+.video-container:hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(2px);
+    pointer-events: none;
+}
+
+.play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 50px;
+    max-height: 50px;
+    pointer-events: none;
+    display: none;
+    fill: var(--accent-color);
+}
+
+.video-container:hover .play-icon {
+    display: block;
+}

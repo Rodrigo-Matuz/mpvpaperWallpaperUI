@@ -59,7 +59,7 @@ Note: replace `package.deb` by the actual name of the package
 for Uninstalling
 
 ```bash
-sudo rm -rf /lib/mpvpaper-wallpaper-picker-ui
+sudo rm -rf /usr/lib/mpvpaper-wallpaper-picker-ui /usr/bin/mpvpaper-wallpaper-picker-ui /usr/share/applications/mpvpaper-wallpaper-picker-ui.desktop /usr/share/doc/mpvpaper-wallpaper-picker-ui /usr/share/lintian/overrides/mpvpaper-wallpaper-picker-ui /usr/share/pixmaps/mpvpaper-wallpaper-picker-ui.png
 ```
 
 </details>

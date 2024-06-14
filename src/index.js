@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const fsExtra = require("fs-extra");
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
 const { playVideo } = require("./videoPlayer");
@@ -82,8 +83,16 @@ ipcMain.handle("play-video", (event, videoPath) => {
     playVideo(videoPath);
 });
 
-ipcMain.handle("clear-cache", () => {
+ipcMain.handle("clear-cache", async () => {
     store.clear();
+    const userDataPath = app.getPath("userData");
+
+    try {
+        await fsExtra.emptyDir(userDataPath);
+        console.log(`Cleared cache and deleted contents of ${userDataPath}`);
+    } catch (err) {
+        console.error(`Error clearing cache: ${err}`);
+    }
 });
 
 async function getVideoData(directoryPath) {
@@ -108,6 +117,7 @@ async function generateThumbnail(videoPath) {
         "thumbnails",
         `${path.basename(videoPath, ".mp4")}.png`,
     );
+    console.log(thumbnailPath);
 
     if (fs.existsSync(thumbnailPath)) {
         return thumbnailPath;
@@ -123,7 +133,7 @@ async function generateThumbnail(videoPath) {
                 count: 1,
                 folder: path.join(app.getPath("userData"), "thumbnails"),
                 filename: `${path.basename(videoPath, ".mp4")}.png`,
-                size: "250x141",
+                size: "220x124",
             })
             .on("end", () => resolve(thumbnailPath))
             .on("error", (err) => reject(err));

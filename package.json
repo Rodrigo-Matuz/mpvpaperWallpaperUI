@@ -1,7 +1,7 @@
 {
     "name": "mpvpaper_wallpaper_picker_ui",
     "productName": "mpvpaper_wallpaper_picker_ui",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "My Electron application description",
     "main": "src/index.js",
     "scripts": {
